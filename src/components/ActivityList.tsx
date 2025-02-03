@@ -3,7 +3,7 @@ import { DispatchType, Rootstate } from "../redux"
 import { Box, Button, Grid, Paper, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { CheckCircle, Delete } from "@mui/icons-material"
-import { toggleActivityComplete } from "../redux/activitySlice"
+import { deleteActivity, toggleActivityComplete } from "../redux/activitySlice"
 
 const ActivityList: React.FC = () => {
     const { activities } = useSelector((state: Rootstate) => state.activity)
@@ -12,6 +12,10 @@ const ActivityList: React.FC = () => {
 
     const handleCompleteClick = (id: string): void => {
         dispatch(toggleActivityComplete({id, date: today}))
+    }
+
+    const handleDeleteClick = (id: string): void => {
+        dispatch(deleteActivity(id))
     }
 
     // check every minute if date has changed and set new date
@@ -45,7 +49,7 @@ const ActivityList: React.FC = () => {
                                         {activity.completedDates.includes(today) ? "Completed" : "Mark Complete"}
                                     </Button>
 
-                                    <Button variant="outlined" color={"error"} startIcon={<Delete />}>Remove</Button>
+                                    <Button variant="outlined" color={"error"} startIcon={<Delete />} onClick={() => handleDeleteClick(activity.id)}>Remove</Button>
                                 </Box>
                             </Grid>
                         </Grid>

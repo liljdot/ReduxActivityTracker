@@ -32,10 +32,10 @@ const activitySlice = createSlice({
             state.activities.push(newActivity)
         },
 
-        toggleActivityComplete(state, action: PayloadAction<{id: string, date: string}>) {
+        toggleActivityComplete(state, action: PayloadAction<{ id: string, date: string }>) {
             //find index of target activity
             const index = state.activities.findIndex(activity => activity.id == action.payload.id)
-            
+
             //check if activity is already completed and undo complete
             if (state.activities[index].completedDates.includes(action.payload.date)) {
                 state.activities[index].completedDates.pop()
@@ -43,6 +43,12 @@ const activitySlice = createSlice({
                 //complete activity for date if not
                 state.activities[index].completedDates.push(action.payload.date)
             }
+        },
+
+        deleteActivity(state, action: PayloadAction<string>) {
+            //find index of target activity
+            const index = state.activities.findIndex(activity => activity.id == action.payload)
+            state.activities.splice(index, 1)
         }
     }
 })
@@ -51,4 +57,4 @@ const activityReducer = activitySlice.reducer
 
 export { activityReducer }
 
-export const { addActivity, toggleActivityComplete } = activitySlice.actions
+export const { addActivity, toggleActivityComplete, deleteActivity } = activitySlice.actions
