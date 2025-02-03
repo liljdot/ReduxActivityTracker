@@ -1,12 +1,31 @@
-import { useSelector } from "react-redux"
-import { Rootstate } from "../redux"
+import { useDispatch, useSelector } from "react-redux"
+import { DispatchType, Rootstate } from "../redux"
 import { Box, Button, Grid, Paper, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CheckCircle, Delete } from "@mui/icons-material"
+import { toggleActivityComplete } from "../redux/activitySlice"
 
 const ActivityList: React.FC = () => {
     const { activities } = useSelector((state: Rootstate) => state.activity)
+    const dispatch = useDispatch<DispatchType>()
     const [today, setToday] = useState<string>(new Date().toISOString().split("T")[0])
+
+    const handleCompleteClick = (id: string): void => {
+        dispatch(toggleActivityComplete({id, date: today}))
+    }
+
+    // check every minute if date has changed and set new date
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (new Date().toISOString().split("T")[0] == today) {
+                return
+            }
+    
+            setToday(new Date().toISOString().split("T")[0])
+        }, 60000)
+
+        return clearInterval(intervalId)
+    }, [])
 
     return (
         <>
@@ -22,7 +41,7 @@ const ActivityList: React.FC = () => {
 
                             <Grid xs={12} sm={6}>
                                 <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-                                    <Button variant="outlined" color={activity.completedDates.includes(today) ? "success" : "primary"} startIcon={<CheckCircle />}>
+                                    <Button variant="outlined" color={activity.completedDates.includes(today) ? "success" : "primary"} startIcon={<CheckCircle />} onClick={() => {handleCompleteClick(activity.id)}}>
                                         {activity.completedDates.includes(today) ? "Completed" : "Mark Complete"}
                                     </Button>
 
