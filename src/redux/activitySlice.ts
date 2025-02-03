@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type Activity = {
     id: string
@@ -20,16 +20,22 @@ const activitySlice = createSlice({
     name: "activity",
     initialState,
     reducers: {
-        addActivity() {
+        addActivity(state, action: PayloadAction<{ name: string, frequency: "daily" | "weekly" }>) {
+            const newActivity: Activity = {
+                id: Date.now().toString(),
+                name: action.payload.name,
+                frequency: action.payload.frequency,
+                completedDates: [],
+                createdAt: new Date().toISOString()
+            }
 
+            state.activities.push(newActivity)
         }
     }
 })
 
 const activityReducer = activitySlice.reducer
 
-export {activityReducer}
+export { activityReducer }
 
 export const { addActivity } = activitySlice.actions
-
-export type ActivityDispatchType = typeof activitySlice.actions

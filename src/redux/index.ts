@@ -1,9 +1,7 @@
 export {
     store,
-    type Rootstate
+    type Rootstate,
+    type DispatchType
 } from "./store"
 
-export {
-    activityReducer, addActivity,
-    type ActivityDispatchType
-} from "./activitySlice"
+export { activityReducer, addActivity } from "./activitySlice"
