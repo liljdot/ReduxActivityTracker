@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 import { DispatchType, Rootstate } from "../redux"
-import { Box, Button, Grid, Paper, Typography } from "@mui/material"
+import { Box, Button, Grid, LinearProgress, Paper, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { CheckCircle, Delete } from "@mui/icons-material"
-import { deleteActivity, toggleActivityComplete } from "../redux/activitySlice"
+import { Activity, deleteActivity, toggleActivityComplete } from "../redux/activitySlice"
 
 const ActivityList: React.FC = () => {
     const { activities } = useSelector((state: Rootstate) => state.activity)
@@ -16,6 +16,26 @@ const ActivityList: React.FC = () => {
 
     const handleDeleteClick = (id: string): void => {
         dispatch(deleteActivity(id))
+    }
+
+    const getStreak = (activity:Activity): number=> {
+        // return if activity not completed today
+        if (!activity.completedDates.includes(today)) {
+            return 0
+        }
+
+        let streak = 1
+        // get previous day's date
+        const prevDay = new Date()
+        prevDay.setDate(prevDay.getDate() - streak)
+
+        //increment streak if completed for previous day. set subsequent previous day
+        while(activity.completedDates.includes(prevDay.toISOString().split("T")[0])) {
+            streak++
+            prevDay.setDate(prevDay.getDate() - streak)
+        }
+
+        return streak
     }
 
     // check every minute if date has changed and set new date
@@ -53,6 +73,14 @@ const ActivityList: React.FC = () => {
                                 </Box>
                             </Grid>
                         </Grid>
+
+                        <Box sx={{mt: 2}}>
+                            <Typography variant="body2">
+                                Current Streak: {getStreak(activity)} days
+                            </Typography>
+
+                            <LinearProgress variant="determinate" value={getStreak(activity)/30 * 100} sx={{mt: 1}}/>
+                        </Box>
                     </Paper>
                 ))}
             </Box>
