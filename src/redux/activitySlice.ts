@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { api } from "../services";
 
 export type Activity = {
     id: string
@@ -10,10 +11,14 @@ export type Activity = {
 
 interface ActivitySliceState {
     activities: Activity[]
+    loading: boolean
+    error: any
 }
 
 const initialState: ActivitySliceState = {
-    activities: []
+    activities: [],
+    loading: false,
+    error: null
 }
 
 const activitySlice = createSlice({
@@ -50,6 +55,19 @@ const activitySlice = createSlice({
             const index = state.activities.findIndex(activity => activity.id == action.payload)
             state.activities.splice(index, 1)
         }
+    },
+    extraReducers: builder => {
+        builder.addMatcher(api.endpoints.getActivities.matchPending, state => { state.loading = true })
+
+        builder.addMatcher(api.endpoints.getActivities.matchFulfilled, (state, action) => {
+            state.loading = false
+            state.activities = action.payload
+        })
+
+        builder.addMatcher(api.endpoints.getActivities.matchRejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+        })
     }
 })
 

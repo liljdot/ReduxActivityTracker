@@ -1,0 +1,1 @@
+export {api, useGetActivitiesQuery} from "./api"

@@ -4,9 +4,11 @@ import { Box, Button, Grid, LinearProgress, Paper, Typography } from "@mui/mater
 import { useEffect, useState } from "react"
 import { CheckCircle, Delete } from "@mui/icons-material"
 import { Activity, deleteActivity, toggleActivityComplete } from "../redux/activitySlice"
+import { useGetActivitiesQuery } from "../services"
 
 const ActivityList: React.FC = () => {
-    const { activities } = useSelector((state: Rootstate) => state.activity)
+    useGetActivitiesQuery()
+    const { activities, loading, error } = useSelector((state: Rootstate) => state.activity)
     const dispatch = useDispatch<DispatchType>()
     const [today, setToday] = useState<string>(new Date().toISOString().split("T")[0])
 
@@ -54,6 +56,7 @@ const ActivityList: React.FC = () => {
     return (
         <>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 4 }}>
+                {loading && <LinearProgress />}
                 {activities.map(activity => (
                     <Paper key={activity.id} elevation={2} sx={{ p: 2 }}>
                         <Grid container alignItems={"center"}>
