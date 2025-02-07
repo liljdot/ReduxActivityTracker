@@ -4,7 +4,8 @@ import { api } from "../services";
 
 const store = configureStore({
     reducer: {
-        activity: activityReducer
+        activity: activityReducer,
+        [api.reducerPath]: api.reducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware)
 })

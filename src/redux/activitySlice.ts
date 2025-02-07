@@ -25,16 +25,8 @@ const activitySlice = createSlice({
     name: "activity",
     initialState,
     reducers: {
-        addActivity(state, action: PayloadAction<{ name: string, frequency: "daily" | "weekly" }>) {
-            const newActivity: Activity = {
-                id: Date.now().toString(),
-                name: action.payload.name,
-                frequency: action.payload.frequency,
-                completedDates: [],
-                createdAt: new Date().toISOString()
-            }
-
-            state.activities.push(newActivity)
+        addActivity(state, action: PayloadAction<Activity>) {
+            state.activities.push(action.payload)
         },
 
         toggleActivityComplete(state, action: PayloadAction<{ id: string, date: string }>) {

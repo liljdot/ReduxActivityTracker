@@ -12,8 +12,28 @@ export const api = createApi({
                 url: "activities",
                 method: "GET"
             })
+        }),
+        postActivity: builder.mutation<Activity, Activity>({
+            query: (credentials) => ({
+                url: "activities",
+                method: "POST",
+                body: credentials
+            })
+        }),
+        deleteActiivity: builder.mutation<Activity, string>({
+            query: (id) => ({
+                url: `activities/${id}`,
+                method: "DELETE"
+            })
+        }),
+        patchActivity: builder.mutation<Activity, Activity>({
+            query: (credentials) => ({
+                url: `activities/${credentials.id}`,
+                method: "PATCH",
+                body: credentials
+            })
         })
     })
 })
 
-export const { useGetActivitiesQuery } = api
+export const { useGetActivitiesQuery, usePostActivityMutation, useDeleteActiivityMutation, usePatchActivityMutation } = api

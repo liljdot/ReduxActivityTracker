@@ -1,1 +1,1 @@
-export {api, useGetActivitiesQuery} from "./api"
+export {api, useGetActivitiesQuery, usePostActivityMutation, useDeleteActiivityMutation, usePatchActivityMutation} from "./api"
