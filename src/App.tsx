@@ -1,6 +1,7 @@
 import { Container, Typography } from "@mui/material"
 import AddActivityForm from "./components/AddActivityForm"
 import ActivityList from "./components/ActivityList"
+import ActivityStats from "./components/ActivityStats"
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
       </Container>
       <AddActivityForm />
       <ActivityList />
+      <ActivityStats />
     </>
   )
 }
